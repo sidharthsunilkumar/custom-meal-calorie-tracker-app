@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { AntDesign, Feather } from '@expo/vector-icons';
 import colors from '../Utils/colors';
 
-export default function EachMeal({ meal, editHandler }) {
+export default function EachMeal({ meal, activateEdit }) {
 
     const [showDetails, setShowDetails] = useState(false);
 
@@ -24,7 +24,7 @@ export default function EachMeal({ meal, editHandler }) {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={editHandler} size={20} style={styles.editContainer}>
+                <TouchableOpacity onPress={()=>activateEdit(meal)} size={20} style={styles.editContainer}>
                     <Feather name='edit' size={16} color={colors.primaryColor} />
                 </TouchableOpacity>
 
@@ -33,15 +33,18 @@ export default function EachMeal({ meal, editHandler }) {
             {showDetails && (
                 <View style={styles.detailsContainer}>
                     {meal.description && (
-                        <Text>Description: {meal.description}</Text>
+                        <Text style={styles.description}>{meal.description}</Text>
                     )}
-                    <Text>Quantity: {meal.quantity}</Text>
-                    <Text>Nutrition:</Text>
-                    <Text>Calorie: {meal.nutrition.calorie}</Text>
-                    <Text>Fat: {meal.nutrition.fat}</Text>
-                    <Text>Fiber: {meal.nutrition.fiber}</Text>
-                    <Text>Protein: {meal.nutrition.protein}</Text>
-                    <Text>Sugar: {meal.nutrition.sugar}</Text>
+                    <View style={styles.subheadingContainer}>
+                        <Text style={styles.subheading}>Nutrition for {meal.quantity} {meal.measureType}</Text>
+                        <View style={styles.underline}></View>
+                    </View>
+                    <Text style={styles.nutritionItem}>Calorie    :  {meal.nutrition.calorie}</Text>
+                    <Text style={styles.nutritionItem}>Protein    :  {meal.nutrition.protein} g</Text>
+                    <Text style={styles.nutritionItem}>Carbs      :  {meal.nutrition.carbs} g</Text>
+                    <Text style={styles.nutritionItem}>Fat           :  {meal.nutrition.fat} g</Text>
+                    <Text style={styles.nutritionItem}>Fiber        :  {meal.nutrition.fiber} g</Text>
+                    <Text style={styles.nutritionItem}>Sugar      :  {meal.nutrition.sugar} g</Text>
                 </View>
             )}
         </View>
@@ -78,6 +81,29 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
         padding: 10
+    },
+    description: {
+        fontStyle: 'italic',
+        paddingHorizontal: 10,
+        marginBottom: 10
+    },
+    subheadingContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 3
+    },
+    subheading: {
+        fontWeight: 'bold',
+    },
+    underline: {
+        flex: 1,
+        height: 1,
+        backgroundColor: 'black',
+        marginLeft: 8,
+    },
+    nutritionItem: {
+        paddingHorizontal: 15,
+        marginVertical: 3
     }
 
 

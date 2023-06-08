@@ -4,30 +4,42 @@ import { useEffect, useState } from 'react';
 import colors from '../Utils/colors';
 import { getData } from '../Utils/localStorageFunctions';
 import EachMeal from './eachMeal';
+import EditMeal from './editMeal';
 
 export default function Meals() {
 
     const [isAddMeal, setIsAddMeal] = useState(false);
     const [myMeals, setMyMeals] = useState([]);
+    const [edit, setEdit] = useState(false);
 
     useEffect(() => {
         // Load todos from storage
+        console.log('reset-high')
         getData('meals').then((data)=>{
             setMyMeals(data)
+            console.log('reset',data)
         })
-    }, [isAddMeal]);
+    }, [isAddMeal,edit]);
+
+    const activateEdit = (meal) => {
+        setEdit(meal);
+    }
+    const deactivateEdit = () => {
+        setEdit(false);
+    }
 
 
     return (
         <View style={styles.container}>
-            {isAddMeal && <AddMeal setIsAddMeal={setIsAddMeal} />}
-            {!isAddMeal && (
+            {isAddMeal && !(edit) && <AddMeal setIsAddMeal={setIsAddMeal} />}
+            {!isAddMeal && !(edit) && (
                 <View style={styles.mealsContainer}>
                     <Text style={styles.pageHeading}>My Meals</Text>
                     <View style={styles.headingUnderline}></View>
 
                     <ScrollView>
-                        {myMeals.map(meal=> <EachMeal key={meal.id} meal={meal}/> )}
+                        {myMeals.map(meal=> <EachMeal key={meal.id} meal={meal} activateEdit={activateEdit}/> )}
+                        <View style={styles.blankSpace}></View>
                     </ScrollView>
 
 
@@ -37,6 +49,7 @@ export default function Meals() {
                     </TouchableOpacity>
                 </View>
             )}
+            {edit && <EditMeal meal={edit} deactivateEdit={deactivateEdit}/> }
         </View>
     )
 
@@ -79,5 +92,8 @@ const styles = StyleSheet.create({
     createButtonText: {
         color: 'white',
         fontSize: 16
+    },
+    blankSpace:{
+        height:60,
     }
 })

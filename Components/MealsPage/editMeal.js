@@ -10,28 +10,28 @@ import {
 import { Picker } from '@react-native-picker/picker';
 import colors from '../Utils/colors';
 import uuid from 'react-native-uuid';
-import { saveData } from '../Utils/localStorageFunctions';
+import { deleteMeal, editMealsData, saveData } from '../Utils/localStorageFunctions';
 
-export default function AddMeal({ setIsAddMeal }) {
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [quantity, setQuantity] = useState('');
-    const [measureType, setMeasureType] = useState('Grams');
-    const [calorie, setCalorie] = useState('');
-    const [protein, setProtein] = useState('');
-    const [carbs, setCarbs] = useState('');
-    const [fat, setFat] = useState('');
-    const [fiber, setFiber] = useState('');
-    const [sugar, setSugar] = useState('');
+export default function EditMeal({ meal, deactivateEdit }) {
+    const [name, setName] = useState(meal.name);
+    const [description, setDescription] = useState(meal.description);
+    const [quantity, setQuantity] = useState(meal.quantity);
+    const [measureType, setMeasureType] = useState(meal.measureType);
+    const [calorie, setCalorie] = useState(meal.nutrition.calorie);
+    const [protein, setProtein] = useState(meal.nutrition.protein);
+    const [carbs, setCarbs] = useState(meal.nutrition.carbs);
+    const [fat, setFat] = useState(meal.nutrition.fat);
+    const [fiber, setFiber] = useState(meal.nutrition.fiber);
+    const [sugar, setSugar] = useState(meal.nutrition.sugar);
 
     const [isCheck, setIsCheck] = useState(false);
 
-    const handleAddMeal = () => {
-        setIsCheck(true);
+    const handleSaveMeal = () => {
+        setIsCheck(true)
         const checked = performChecks();
         if (checked) {
             let data = {
-                id: uuid.v4(),
+                id: meal.id,
                 name: name,
                 description: description,
                 measureType: measureType,
@@ -42,22 +42,31 @@ export default function AddMeal({ setIsAddMeal }) {
                     carbs: carbs || "0",
                     fat: fat || "0",
                     fiber: fiber || "0",
-                    sugar: sugar || "0",
-                },
+                    sugar: sugar || "0"
+                }
             };
-
-            saveData("meals", data)
+            editMealsData(data)
                 .then((success) => {
                     if (success) {
-                        setIsAddMeal(false);
-                    } else {
-                        console.log('Error saving data');
+                        deactivateEdit();
                     }
                 })
                 .catch((error) => {
-                    console.log('Error saving data:', error);
+                    console.log('Edit operation error:', error);
                 });
         }
+    };
+
+    const handleDeleteMeal = () => {
+        deleteMeal(meal)
+            .then((success) => {
+                if (success) {
+                    deactivateEdit();
+                }
+            })
+            .catch((error) => {
+                console.log('Delete operation error:', error);
+            });
     };
 
 
@@ -69,7 +78,7 @@ export default function AddMeal({ setIsAddMeal }) {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>Add a Meal</Text>
+            <Text style={styles.title}>Edit Meal</Text>
             <View style={styles.form}>
                 <Text style={styles.label}>Name*</Text>
                 <TextInput
@@ -183,12 +192,17 @@ export default function AddMeal({ setIsAddMeal }) {
                 </View>
             </View>
             <View style={styles.buttonsContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => { setIsAddMeal(false) }}>
+                <TouchableOpacity style={styles.button} onPress={() => { deactivateEdit() }}>
                     <Text style={styles.buttonText}>Cancel</Text>
                 </TouchableOpacity>
                 <View style={styles.spacer} />
-                <TouchableOpacity style={styles.button} onPress={handleAddMeal}>
-                    <Text style={styles.buttonText}>Add</Text>
+                <TouchableOpacity style={styles.button} onPress={handleSaveMeal}>
+                    <Text style={styles.buttonText}>Save</Text>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.deleteViewContainer}>
+                <TouchableOpacity style={[styles.button, styles.deleteButton]} onPress={() => handleDeleteMeal()}>
+                    <Text style={[styles.buttonText, styles.deleteButtonText]}>Delete Meal</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>
@@ -316,4 +330,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center', // Align text horizontally in the center
     },
+    deleteViewContainer: {
+        marginVertical: 15
+    },
+    deleteButton: {
+        width: 150,
+        borderRadius: 10,
+        backgroundColor: 'white'
+    },
+    deleteButtonText: {
+        color: colors.primaryColorLighter
+    }
 });
