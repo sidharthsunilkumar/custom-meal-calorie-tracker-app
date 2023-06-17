@@ -14,10 +14,8 @@ export default function Meals() {
 
     useEffect(() => {
         // Load todos from storage
-        console.log('reset-high')
         getData('meals').then((data)=>{
             setMyMeals(data)
-            console.log('reset',data)
         })
     }, [isAddMeal,edit]);
 

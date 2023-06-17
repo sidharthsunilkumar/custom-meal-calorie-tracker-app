@@ -13,6 +13,7 @@ import Header from './Components/header';
 export default function App() {
 
   const [activeTab, setActiveTab] = useState('home');
+  const [seeNavBar, setSeeNavBar] = useState(true);
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
@@ -38,9 +39,12 @@ export default function App() {
       <View style={styles.page}>
         {page}
       </View>
-      <View style={styles.navbar}>
-        <BottomNavBar activeTab={activeTab} onChangeTab={handleTabChange} />
-      </View>
+      {seeNavBar && (
+        <View style={styles.navbar}>
+          <BottomNavBar activeTab={activeTab} onChangeTab={handleTabChange} />
+        </View>
+      )}
+
     </SafeAreaView>
   );
 }
