@@ -37,7 +37,7 @@ export function saveData(type, data) {
                     resolve(false); // Return false for failure
                 });
         } else if (type === 'consumed_meals') {
-            getData(type+'_'+data.currentDate)
+            getData(type + '_' + data.currentDate)
                 .then((existingData) => {
                     let newData = [];
                     let date = data.currentDate;
@@ -142,4 +142,54 @@ export function deleteMeal(data) {
             });
     });
 }
+
+export function addAConsumedMeal(meal) {
+    const type = "myConsumedMeals_"+meal.currentDate;
+    return new Promise((resolve, reject) => {
+        getData(type)
+            .then((existingData) => {
+                let newData = [];
+                if (existingData && Array.isArray(existingData)) {
+                    newData = [...existingData, meal];
+                } else {
+                    newData.push(meal);
+                }
+                AsyncStorage.setItem(localStorageVarName + '_' + type, JSON.stringify(newData))
+                    .then(() => {
+                        resolve(true); // Return true for success
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        resolve(false); // Return false for failure
+                    });
+            })
+            .catch((error) => {
+                console.log(error);
+                resolve(false); // Return false for failure
+            });
+    });
+}
+
+export function deleteAConsumedMeal(meal) {
+    const type = "myConsumedMeals_"+meal.currentDate;
+    return new Promise((resolve, reject) => {
+        getData(type)
+            .then((existingData) => {
+                let newData = existingData.filter((obj)=> meal.id != obj.id);
+                AsyncStorage.setItem(localStorageVarName + '_' + type, JSON.stringify(newData))
+                    .then(() => {
+                        resolve(true); // Return true for success
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        resolve(false); // Return false for failure
+                    });
+            })
+            .catch((error) => {
+                console.log(error);
+                resolve(false); // Return false for failure
+            });
+    });
+}
+
 

@@ -13,8 +13,8 @@ export default function Meals() {
     const [edit, setEdit] = useState(false);
 
     useEffect(() => {
-        // Load todos from storage
         getData('meals').then((data)=>{
+            // console.log(data);
             setMyMeals(data)
         })
     }, [isAddMeal,edit]);

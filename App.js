@@ -31,7 +31,7 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar style="auto" />
       <View style={styles.header}>
         <Header />
@@ -44,8 +44,7 @@ export default function App() {
           <BottomNavBar activeTab={activeTab} onChangeTab={handleTabChange} />
         </View>
       )}
-
-    </SafeAreaView>
+    </View>
   );
 }
 

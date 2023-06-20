@@ -4,30 +4,14 @@ import { Svg, Circle, Text as SvgText } from 'react-native-svg';
 import { Feather } from '@expo/vector-icons';
 import { getData } from '../Utils/localStorageFunctions';
 import SearchPage from './searchPage';
+import colors from '../Utils/colors';
+import ConsumedMeals from './consumedMeals';
 // import SearchPage from './searchPage';
 
 export default function Home() {
 
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [showSearchPage, setShowSearchPage] = useState(true);
-
-    const [nutritionGoals, setNutritionGoals] = useState({
-        calorie: "2000",
-        protein: "130",
-        carbs: "250",
-        fat: "60",
-        fiber: "27",
-        sugar: "20",
-    });
-
-    const [totalNutritionGoals, setTotalNutrition] = useState({
-        calorie: "2200",
-        protein: "100",
-        carbs: "0",
-        fat: "30",
-        fiber: "24",
-        sugar: "20",
-    });
+    const [showSearchPage, setShowSearchPage] = useState(false);
 
     const goBackDate = () => {
         const previousDate = new Date(currentDate);
@@ -67,12 +51,17 @@ export default function Home() {
                                 <Feather name='arrow-right-circle' size={26} color='black' />
                             </TouchableOpacity>
                         </View>
-                        <View style={styles.addMealButtonContainer}>
-                            <TouchableOpacity style={styles.addMealButton}>
-                                <Text style={styles.addMealButtonText}>Add Meal</Text>
-                            </TouchableOpacity>
+                        <View style={styles.headingUnderline}></View>
+                        <View style={styles.consumedMealsContainer}>
+                            <ConsumedMeals currentDate={currentDate}/>
                         </View>
                     </ScrollView>
+                    <View style={styles.addMealButtonContainer}>
+                        <TouchableOpacity style={styles.addMealButton} onPress={()=> {setShowSearchPage(true)}} >
+                            <Text style={styles.addMealButtonText}>Add a meal</Text>
+                        </TouchableOpacity>
+                    </View>
+
                 </View>)}
         </View>
     )
@@ -83,6 +72,11 @@ const styles = StyleSheet.create({
     container: {
         height: '100%',
         padding: 20,
+        paddingBottom: 10
+    },
+    dashboardContainer: {
+        flex: 1,
+        flexDirection: 'column'
     },
     headingContainer: {
         marginBottom: 20,
@@ -134,27 +128,28 @@ const styles = StyleSheet.create({
         fontWeight: 600
     },
     addMealButtonContainer: {
-        backgroundColor: 'aqua',
-        // height: '100%',
-        flex: 1,
-        // position: 'relative',
-        // bottom: 20,
-        // left: 0,
-        // right: 0,
-        // justifyContent: 'center',
-        // alignItems: 'center',
-      },
-    // addMealButton: {
-    //     backgroundColor: '#1E90FF',
-    //     borderRadius: 10,
-    //     paddingVertical: 15,
-    //     paddingHorizontal: 20,
-    // },
-    // addMealButtonText: {
-    //     color: '#FFFFFF',
-    //     fontSize: 18,
-    //     fontWeight: 'bold',
-    // },
-    
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    addMealButton: {
+        backgroundColor: colors.primaryColorLighter,
+        borderRadius: 30,
+        paddingVertical: 6,
+        paddingHorizontal: 50,
+        shadowColor: 'black',
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+        elevation: 5,
+    },
+    addMealButtonText: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+
 
 })

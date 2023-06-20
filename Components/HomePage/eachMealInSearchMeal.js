@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { AntDesign, Feather } from '@expo/vector-icons';
 import colors from '../Utils/colors';
+import { addAConsumedMeal } from '../Utils/localStorageFunctions';
+import { convertToDateString } from '../Utils/commonFunctions';
+import uuid from 'react-native-uuid';
 
 export default function EachMealInSearchPage({ meal, currentDate }) {
 
@@ -9,18 +12,23 @@ export default function EachMealInSearchPage({ meal, currentDate }) {
     const [quantity, setQuantity] = useState(meal.quantity);
 
     const handleAdd = () => {
-        let year = currentDate.getFullYear();
-        let month = currentDate.getMonth() + 1; // Adding 1 because getMonth() returns zero-based month index
-        let date = currentDate.getDate();
-
-        let currentDateStr = `${year}-${month}-${date}`;
-        let data = {
-            mealId: meal.id,
-            quantity: quantity,
-            currentDate: currentDateStr
+        if (handleChecks) {            
+            let data = {
+                id: uuid.v4(),
+                mealId: meal.id,
+                quantity: quantity,
+                currentDate: convertToDateString(currentDate)
+            }
+            console.log(data);
+            setShowDetails(false);
+            addAConsumedMeal(data);
+        } else {
+            //toast
         }
-        console.log(data);
-        setShowDetails(false)
+    }
+
+    const handleChecks = () => {
+        return true
     }
 
     const toggleDetails = () => {
