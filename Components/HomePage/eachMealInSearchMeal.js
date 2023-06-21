@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
-import { AntDesign, Feather } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import colors from '../Utils/colors';
 import { addAConsumedMeal } from '../Utils/localStorageFunctions';
 import { convertToDateString } from '../Utils/commonFunctions';
 import uuid from 'react-native-uuid';
 
-export default function EachMealInSearchPage({ meal, currentDate }) {
+export default function EachMealInSearchPage({ meal, currentDate, setMeals }) {
 
     const [showDetails, setShowDetails] = useState(false);
     const [quantity, setQuantity] = useState(meal.quantity);
@@ -19,9 +19,9 @@ export default function EachMealInSearchPage({ meal, currentDate }) {
                 quantity: quantity,
                 currentDate: convertToDateString(currentDate)
             }
-            console.log(data);
             setShowDetails(false);
             addAConsumedMeal(data);
+            setMeals(prev => [...prev, data]);
         } else {
             //toast
         }

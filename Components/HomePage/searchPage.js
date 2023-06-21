@@ -4,27 +4,9 @@ import { getData } from "../Utils/localStorageFunctions";
 import colors from "../Utils/colors";
 import EachMealInSearchPage from "./eachMealInSearchMeal";
 
-export default function SearchPage({setShowSearchPage, currentDate}) {
-    const [allMeals, setAllMeals] = useState([]);
+export default function SearchPage({ setShowSearchPage, currentDate, allMeals, setMeals }) {
+    
     const [query, setQuery] = useState('');
-
-    useEffect(() => {
-        getData('meals')
-            .then((data) => {
-                if (data) {
-                    setAllMeals(data);
-                    console.log(data);
-                }
-            })
-            .catch((error) => {
-                console.log('Could not fetch meals data:');
-                console.log(error);
-            });
-    }, []);
-
-    const handleSelectMeal = (id) => {
-        console.log('Selected meal ID:', id);
-    };
 
     const filteredMeals = allMeals.filter((meal) =>
         meal.name.toLowerCase().includes(query.toLowerCase())
@@ -52,7 +34,7 @@ export default function SearchPage({setShowSearchPage, currentDate}) {
             </View>
 
             <ScrollView>
-                {filteredMeals.map(meal => <EachMealInSearchPage key={meal.id} meal={meal} currentDate={currentDate} />)}
+                {filteredMeals.map(meal => <EachMealInSearchPage key={meal.id} meal={meal} currentDate={currentDate} setMeals={setMeals} />)}
                 <View style={styles.blankSpace}></View>
             </ScrollView>
 

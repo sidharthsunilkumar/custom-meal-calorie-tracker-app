@@ -6,29 +6,7 @@ import { StyleSheet, View, Text } from "react-native";
 import colors from "../Utils/colors";
 
 
-export default function ConsumedMeals({ currentDate }) {
-
-    const [meals, setMeals] = useState([]);
-    const [allMeals, setAllMeals] = useState([]);
-
-    useEffect(() => {
-        console.log('getting called')
-        getData("myConsumedMeals_" + convertToDateString(currentDate)).then((data) => {
-            console.log(data)
-            if (data && data.length > 0) {
-                setMeals(data);
-            }
-        })
-        getData('meals').then((data) => {
-            setAllMeals(data)
-        })
-    }, []);
-
-    const updateComponent = (type, meal) => {
-        if(type === 'delete'){
-            setMeals(prevMeals => prevMeals.filter(m => m.id !== meal.id));
-        }
-    }
+export default function ConsumedMeals({ meals, setMeals, allMeals }) {
 
     const getMealInfo = (id) => {
         const filteredMeal = allMeals.filter((meal) => meal.id == id)[0];
@@ -38,7 +16,7 @@ export default function ConsumedMeals({ currentDate }) {
     return (
         <View style={styles.mealsContainer}>
             {meals.length > 0 ? (
-                meals.map((meal) => <EachConsumedMeal key={meal.id} meal={meal} mealInfo={getMealInfo(meal.mealId)} updateComponent={updateComponent} />)
+                meals.map((meal) => <EachConsumedMeal key={meal.id} meal={meal} mealInfo={getMealInfo(meal.mealId)} setMeals={setMeals} />)
             ) : (
                 <View style={styles.emptyTextContainer}>
                     <Text style={styles.emptyText}>You haven't added any meals!</Text>

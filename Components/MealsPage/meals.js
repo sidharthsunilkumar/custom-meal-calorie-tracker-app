@@ -14,7 +14,6 @@ export default function Meals() {
 
     useEffect(() => {
         getData('meals').then((data)=>{
-            // console.log(data);
             setMyMeals(data)
         })
     }, [isAddMeal,edit]);

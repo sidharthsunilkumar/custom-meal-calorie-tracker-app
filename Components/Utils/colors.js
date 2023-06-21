@@ -3,6 +3,7 @@ const colors = {
     bgGrey: '#F5F5F5',
     primaryColorLighter: '#EF5350',
     primaryColorLightest: '#EF9A9A',
+    greyDarker: '#BDBDBD'
   };
   
   export default colors;

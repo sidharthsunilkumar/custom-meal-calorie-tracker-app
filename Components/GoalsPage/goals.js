@@ -14,9 +14,7 @@ export default function Goals() {
     const [isEdit, setIsEdit] = useState(false);
 
     useEffect(() => {
-        // Load todos from storage
         getData('goals').then((data) => {
-            console.log('pass data-', data)
             if (data) {
                 setCalorie(data.calorie);
                 setProtein(data.protein);
@@ -28,7 +26,6 @@ export default function Goals() {
                 setIsEdit(true);
             }
         }).catch((error) => {
-            console.log('fail data-')
             console.log(error);
             setIsEdit(true);
         })

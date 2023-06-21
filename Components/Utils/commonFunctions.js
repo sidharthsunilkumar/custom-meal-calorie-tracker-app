@@ -7,3 +7,13 @@ export function convertToDateString(date) {
     let dateStr = `${year}-${month}-${day}`;
     return dateStr;
 }
+
+export function calculateNutrition(nutrition, consumedQuantity, mealInfoQuantity) {
+    let newNutrition = nutrition * consumedQuantity / mealInfoQuantity;
+    if (newNutrition % 1 !== 0) {
+        newNutrition = parseFloat(newNutrition.toFixed(2));
+    } else {
+        newNutrition = parseInt(newNutrition);
+    }
+    return newNutrition;
+}

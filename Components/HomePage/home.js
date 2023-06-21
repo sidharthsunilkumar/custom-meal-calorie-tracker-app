@@ -6,54 +6,126 @@ import { getData } from '../Utils/localStorageFunctions';
 import SearchPage from './searchPage';
 import colors from '../Utils/colors';
 import ConsumedMeals from './consumedMeals';
+import SummaryCard from './summaryCard';
+import DateComponent from './dateComponent';
+import { calculateNutrition, convertToDateString } from '../Utils/commonFunctions';
 // import SearchPage from './searchPage';
 
 export default function Home() {
 
     const [currentDate, setCurrentDate] = useState(new Date());
     const [showSearchPage, setShowSearchPage] = useState(false);
+    const [meals, setMeals] = useState([]);
+    const [allMeals, setAllMeals] = useState([]);
+    const [totalNutrition, setTotalNutrition] = useState({
+        calorie: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+        fiber: 0,
+        sugar: 0
+    });
+    const [goals, setGoals] = useState({
+        calorie: "",
+        protein: "",
+        carbs: "",
+        fat: "",
+        fiber: "",
+        sugar: ""
+    });
+    const [percentage, setPercentage] = useState({
+        calorie: "",
+        protein: "",
+        carbs: "",
+        fat: "",
+        fiber: "",
+        sugar: ""
+    });
+    const nutrients = ["calorie", "protein", "carbs", "fat", "fiber", "sugar"];
 
-    const goBackDate = () => {
-        const previousDate = new Date(currentDate);
-        previousDate.setDate(currentDate.getDate() - 1);
-        setCurrentDate(previousDate);
-    };
-    const goForwardDate = () => {
-        const nextDate = new Date(currentDate);
-        nextDate.setDate(currentDate.getDate() + 1);
-        setCurrentDate(nextDate);
-    };
-    const formatDate = (date) => {
-        const options = { month: 'short', day: 'numeric', year: '2-digit' };
-        return date.toLocaleDateString('en-US', options);
-    };
+    useEffect(() => {
+        getData('goals').then((data) => {
+            setGoals(data)
+        })
+        getData('meals').then((data) => {
+            setAllMeals(data)
+        })
+    }, []);
+
+    useEffect(() => {
+        getData("myConsumedMeals_" + convertToDateString(currentDate)).then((data) => {
+            if (data && data.length > 0) {
+                setMeals(data);
+            } else {
+                setMeals([]);
+            }
+        })
+        
+    }, [currentDate]);
+
+    useEffect(() => {
+        calculateTotalNutrition(meals, allMeals)
+    }, [meals]);
+
+    useEffect(() => {
+        calculateAllPercentage();
+    }, [totalNutrition]);
+
+    const calculateTotalNutrition = (mealList, mealInfoList) => {
+        const totalNutrition = {
+            calorie: 0,
+            protein: 0,
+            carbs: 0,
+            fat: 0,
+            fiber: 0,
+            sugar: 0
+        };
+        if (mealList.length === 0) {
+            setTotalNutrition(totalNutrition);
+            return;
+        }
+
+        mealList.forEach(meal => {
+            const mealInfo = mealInfoList.find(info => info.id === meal.mealId);
+            if (mealInfo) {
+                for (let nutrient of nutrients) {
+                    totalNutrition[nutrient] += calculateNutrition(mealInfo.nutrition[nutrient], meal.quantity, mealInfo.quantity);
+                }
+            }
+        });
+        setTotalNutrition(totalNutrition);
+    }
+
+    const calculateAllPercentage = () => {
+        let newPercentage = { ...percentage };
+        for (let nutrient of nutrients) {
+            if (totalNutrition[nutrient] !== "" && goals[nutrient] !== "") {
+                newPercentage[nutrient] = goals[nutrient] == '0' ? 100 : Math.floor(
+                    (totalNutrition[nutrient] / goals[nutrient]) * 100
+                );
+            }
+        }
+        setPercentage(newPercentage)
+    }
 
     return (
         <View style={styles.container}>
-            {showSearchPage ? (<SearchPage currentDate={currentDate} setShowSearchPage={setShowSearchPage} />) : (
+            {showSearchPage ? (<SearchPage setShowSearchPage={setShowSearchPage} currentDate={currentDate} allMeals={allMeals} setMeals={setMeals} />) : (
                 <View style={styles.dashboardContainer}>
                     <View style={styles.headingContainer}>
                         <Text style={styles.pageHeading}>My Dashboard</Text>
                         <View style={styles.headingUnderline}></View>
                     </View>
                     <ScrollView>
-                        <View style={styles.summaryCardContainer}>
-
+                        <View>
+                            <SummaryCard totalNutrition={totalNutrition} goals={goals} percentage={percentage} />
                         </View>
-                        <View style={styles.dateContainer}>
-                            <TouchableOpacity onPress={goBackDate} style={styles.dateButtonContainer}>
-                                <Text><Feather name='arrow-left-circle' size={26} color='black' /></Text>
-                            </TouchableOpacity>
-                            <View style={styles.dateTextContainer}>
-                                <Text style={styles.dateText}>{formatDate(currentDate)}</Text>
-                            </View>
-                            <TouchableOpacity onPress={goForwardDate} style={[styles.dateButtonContainer, { alignItems: 'flex-end' }]}>
-                                <Feather name='arrow-right-circle' size={26} color='black' />
-                            </TouchableOpacity>
+                        <View>
+                            <DateComponent currentDate={currentDate} setCurrentDate={setCurrentDate} />
                         </View>
                         <View style={styles.headingUnderline}></View>
-                        <View style={styles.consumedMealsContainer}>
-                            <ConsumedMeals currentDate={currentDate}/>
+                        <View>
+                            <ConsumedMeals meals={meals} setMeals={setMeals} allMeals={allMeals} />
                         </View>
                     </ScrollView>
                     <View style={styles.addMealButtonContainer}>
@@ -88,44 +160,6 @@ const styles = StyleSheet.create({
     headingUnderline: {
         backgroundColor: 'black',
         height: 1,
-    },
-    summaryCardContainer: {
-        marginHorizontal: 5,
-        marginVertical: 5,
-        backgroundColor: '#ffffff',
-        padding: 10,
-        borderRadius: 10,
-        marginBottom: 10,
-        shadowColor: 'black',
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.5,
-        shadowRadius: 5,
-        elevation: 5,
-        height: 200,
-    },
-    dateContainer: {
-        flexDirection: 'row',
-    },
-    dateButtonContainer: {
-        flex: 1,
-        height: '100%',
-        paddingHorizontal: 10,
-        paddingVertical: 10,
-    },
-    dateTextContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    dateText: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        textDecorationLine: 'underline',
-        fontSize: 18,
-        fontWeight: 600
     },
     addMealButtonContainer: {
         justifyContent: 'center',
