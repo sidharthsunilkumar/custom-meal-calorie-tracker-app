@@ -3,17 +3,18 @@ import { StyleSheet, Text, View } from "react-native";
 import { getData } from "../Utils/localStorageFunctions";
 import { calculateNutrition, convertToDateString } from "../Utils/commonFunctions";
 import DonutGraph from "./donutGraph";
+import IconComponent from "./iconComponent";
 
 
 export default function SummaryCard({ totalNutrition, goals, percentage }) {
 
     const colorsObj = {
-        calorie: '#FF9800', //Orange
-        protein: '#FF5722', //Reddish-Orange
-        carbs: '#2196F3',   //Blue
+        calorie: '#E53935', //Red
+        protein: '#FB8C00', //Orange
+        carbs: '#FBC02D',   //Yellow
         fat: '#795548',     //Brown
         fiber: '#4CAF50',   //Green
-        sugar: '#9C27B0'    //Purple
+        sugar: '#2196F3'    //Blue
     }
 
     const trackedSummaryView = (name, id) => {
@@ -27,22 +28,29 @@ export default function SummaryCard({ totalNutrition, goals, percentage }) {
                 </View>
                 <View style={styles.textSection}>
                     <Text style={styles.titleText}>{name}</Text>
-                    <Text style={styles.nutritionText}>{consumed}/{goal}</Text>
+                    <Text style={styles.nutritionText}>{consumed}{id==='calorie'?'':'g'}/{goal}{id==='calorie'?'':'g'}</Text>
                 </View>
             </View>
         )
     }
-    const untrackedSummaryView = (name, consumed) => {
+    const untrackedSummaryView = (name, id) => {
+        const consumed = totalNutrition[id];
         return (
-            <View>
-                <Text>{name}: {consumed}</Text>
+            <View style={styles.trackedCard}>
+                <View style={[styles.iconSection,{backgroundColor: colorsObj[id]}]}>
+                    <IconComponent id={id} />
+                </View>
+                <View style={styles.textSection}>
+                    <Text style={styles.titleText}>{name}</Text>
+                    <Text style={styles.nutritionText}>{consumed}{id==='calorie'?'':'g'}</Text>
+                </View>
             </View>
         )
     }
     const NutritionCardView = (title, id) => {
         return (
             <View>
-                {percentage[id] === "" ? untrackedSummaryView(title, totalNutrition[id]) : trackedSummaryView(title, id)}
+                {percentage[id] === "" ? untrackedSummaryView(title, id) : trackedSummaryView(title, id)}
             </View>
         )
     }
@@ -98,25 +106,35 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginVertical: 10,
+        marginVertical: 5,
     },
     column: {
         flex: 1,
+        paddingVertical: 5,
+        // backgroundColor: 'aqua'
         // alignItems: 'center',
         // borderWidth: 1,
         // borderColor: 'red'
     },
     trackedCard: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     graphSection: {
         marginRight: 10, // Add some margin between graph and text
     },
+    iconSection: {
+        marginRight: 10, // Add some margin between graph and text
+        width: 55,
+        height: 55,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'orange',
+        borderRadius: 30
+    },
     textSection: {
         flex: 1, // Take remaining width
         // alignItems: 'center',
-        // backgroundColor: 'aqua'
     },
     titleText: {
         fontWeight: 'bold'
