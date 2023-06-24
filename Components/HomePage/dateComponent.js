@@ -1,5 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import {formatDate} from '../Utils/commonFunctions';
 
 
 export default function DateComponent({ currentDate, setCurrentDate }) {
@@ -13,10 +14,6 @@ export default function DateComponent({ currentDate, setCurrentDate }) {
         const nextDate = new Date(currentDate);
         nextDate.setDate(currentDate.getDate() + 1);
         setCurrentDate(nextDate);
-    };
-    const formatDate = (date) => {
-        const options = { month: 'short', day: 'numeric', year: '2-digit' };
-        return date.toLocaleDateString('en-US', options);
     };
 
     return (

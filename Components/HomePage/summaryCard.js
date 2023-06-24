@@ -4,18 +4,10 @@ import { getData } from "../Utils/localStorageFunctions";
 import { calculateNutrition, convertToDateString } from "../Utils/commonFunctions";
 import DonutGraph from "./donutGraph";
 import IconComponent from "./iconComponent";
+import { nutrtionColorsObj } from "../Utils/colors";
 
 
 export default function SummaryCard({ totalNutrition, goals, percentage }) {
-
-    const colorsObj = {
-        calorie: '#E53935', //Red
-        protein: '#FB8C00', //Orange
-        carbs: '#FBC02D',   //Yellow
-        fat: '#795548',     //Brown
-        fiber: '#4CAF50',   //Green
-        sugar: '#2196F3'    //Blue
-    }
 
     const trackedSummaryView = (name, id) => {
         const consumed = totalNutrition[id];
@@ -24,7 +16,7 @@ export default function SummaryCard({ totalNutrition, goals, percentage }) {
         return (
             <View style={styles.trackedCard}>
                 <View style={styles.graphSection}>
-                    <DonutGraph color={colorsObj[id]} percent={percent} />
+                    <DonutGraph color={nutrtionColorsObj[id]} percent={percent} />
                 </View>
                 <View style={styles.textSection}>
                     <Text style={styles.titleText}>{name}</Text>
@@ -37,7 +29,7 @@ export default function SummaryCard({ totalNutrition, goals, percentage }) {
         const consumed = totalNutrition[id];
         return (
             <View style={styles.trackedCard}>
-                <View style={[styles.iconSection,{backgroundColor: colorsObj[id]}]}>
+                <View style={[styles.iconSection,{backgroundColor: nutrtionColorsObj[id]}]}>
                     <IconComponent id={id} />
                 </View>
                 <View style={styles.textSection}>

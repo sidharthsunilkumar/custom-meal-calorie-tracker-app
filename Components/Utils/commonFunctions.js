@@ -8,6 +8,11 @@ export function convertToDateString(date) {
     return dateStr;
 }
 
+export function formatDate(date) {
+    const options = { month: 'short', day: 'numeric', year: '2-digit' };
+    return date.toLocaleDateString('en-US', options);
+};
+
 export function calculateNutrition(nutrition, consumedQuantity, mealInfoQuantity) {
     let newNutrition = nutrition * consumedQuantity / mealInfoQuantity;
     if (newNutrition % 1 !== 0) {
@@ -16,4 +21,14 @@ export function calculateNutrition(nutrition, consumedQuantity, mealInfoQuantity
         newNutrition = parseInt(newNutrition);
     }
     return newNutrition;
+}
+
+export function calculateConsumedPercentage(consumed, goal) {
+    let percent = null;
+    if( consumed && goal && consumed!="" && goal!=""){
+        percent = goal == '0' ? 100 : Math.floor(
+            (consumed / goal) * 100
+        );
+    }
+    return percent
 }
