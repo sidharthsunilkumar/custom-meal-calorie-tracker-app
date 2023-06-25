@@ -40,6 +40,6 @@ const styles = StyleSheet.create({
     emptyText: {
         textAlign: "center",
         fontSize: 17,
-        color: 'gray'
+        color: colors.grayText
     },
 })

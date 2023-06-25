@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   },
   page: {
     flex: 1,
-    backgroundColor: colors.bgGrey,
+    backgroundColor: colors.bgGray,
   },
   navbar: {
     height: 60,

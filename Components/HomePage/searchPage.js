@@ -32,7 +32,12 @@ export default function SearchPage({ setShowSearchPage, currentDate, allMeals, s
                     />
                 </View>
             </View>
-
+            {filteredMeals.length == 0 && (
+                <View style={styles.noMealsTextContainer}>
+                    <Text style={styles.noMealsText}>You haven't created any meals!</Text>
+                    <Text style={styles.noMealsText}>Create one in the 'Meals' tab below!</Text>
+                </View>
+            )}
             <ScrollView>
                 {filteredMeals.map(meal => <EachMealInSearchPage key={meal.id} meal={meal} currentDate={currentDate} setMeals={setMeals} />)}
                 <View style={styles.blankSpace}></View>
@@ -94,6 +99,16 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 30,
+    },
+    noMealsTextContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 300
+    },
+    noMealsText: {
+        color: colors.grayText,
+        fontSize: 17,
+        marginBottom: 10
     }
 
 })

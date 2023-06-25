@@ -20,7 +20,7 @@ export default function DonutGraph({ color, percent }) {
     {
         name: formatTitle(percent),
         value: Math.max(100 - percent, 0.1),
-        color: colors.greyDarker
+        color: colors.grayDarker
     }]
 
     useEffect(() => {
@@ -32,7 +32,7 @@ export default function DonutGraph({ color, percent }) {
         {
             name: formatTitle(percent),
             value: Math.max(100 - percent, 0.1),
-            color: colors.greyDarker
+            color: colors.grayDarker
         }]
         setRender(!render)
     }, [percent]);

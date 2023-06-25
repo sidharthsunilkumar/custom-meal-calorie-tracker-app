@@ -13,10 +13,12 @@ export default function Meals() {
     const [edit, setEdit] = useState(false);
 
     useEffect(() => {
-        getData('meals').then((data)=>{
-            setMyMeals(data)
+        getData('meals').then((data) => {
+            if (data) {
+                setMyMeals(data)
+            }
         })
-    }, [isAddMeal,edit]);
+    }, [isAddMeal, edit]);
 
     const activateEdit = (meal) => {
         setEdit(meal);
@@ -34,19 +36,23 @@ export default function Meals() {
                     <Text style={styles.pageHeading}>My Meals</Text>
                     <View style={styles.headingUnderline}></View>
 
+                    {myMeals.length == 0 && (
+                        <View style={styles.noMealsTextContainer}>
+                            <Text style={styles.noMealsText}>You haven't created any meals!</Text>
+                        </View>
+                    )}
+
                     <ScrollView>
-                        {myMeals.map(meal=> <EachMeal key={meal.id} meal={meal} activateEdit={activateEdit}/> )}
+                        {myMeals.map(meal => <EachMeal key={meal.id} meal={meal} activateEdit={activateEdit} />)}
                         <View style={styles.blankSpace}></View>
                     </ScrollView>
-
-
 
                     <TouchableOpacity style={styles.createButton} onPress={() => { setIsAddMeal(true) }}>
                         <Text style={styles.createButtonText}>Create a meal</Text>
                     </TouchableOpacity>
                 </View>
             )}
-            {edit && <EditMeal meal={edit} deactivateEdit={deactivateEdit}/> }
+            {edit && <EditMeal meal={edit} deactivateEdit={deactivateEdit} />}
         </View>
     )
 
@@ -57,7 +63,7 @@ const styles = StyleSheet.create({
         height: '100%'
     },
     mealsContainer: {
-        flex:1,
+        flex: 1,
         margin: 20
     },
     pageHeading: {
@@ -90,7 +96,17 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16
     },
-    blankSpace:{
-        height:60,
+    blankSpace: {
+        height: 60,
+    },
+    noMealsTextContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 500
+    },
+    noMealsText: {
+        color: colors.grayText,
+        fontSize: 17,
+        marginBottom: 10
     }
 })

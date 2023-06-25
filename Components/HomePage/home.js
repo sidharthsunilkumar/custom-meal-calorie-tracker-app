@@ -45,10 +45,14 @@ export default function Home() {
 
     useEffect(() => {
         getData('goals').then((data) => {
-            setGoals(data)
+            if(data){
+                setGoals(data)
+            }
         })
         getData('meals').then((data) => {
-            setAllMeals(data)
+            if(data){
+                setAllMeals(data)
+            }
         })
     }, []);
 

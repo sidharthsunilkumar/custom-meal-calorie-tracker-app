@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const localStorageVarName = 'meal_tracker_VH6gG4';
+const localStorageVarName = 'meal_tracker_VH6gG5';
 
 export function saveData(type, data) {
     return new Promise((resolve, reject) => {
