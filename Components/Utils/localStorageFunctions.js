@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const localStorageVarName = 'meal_tracker_VH6gG5';
+const localStorageVarName = 'meal_tracker_VH6gG7';
 
 export function saveData(type, data) {
     return new Promise((resolve, reject) => {
@@ -190,6 +190,28 @@ export function deleteAConsumedMeal(meal) {
     });
 }
 
+export function deleteAConsumedMealByMealId(mealId, date) {
+    const type = "myConsumedMeals_" + date;
+    return new Promise((resolve, reject) => {
+        getData(type)
+            .then((existingData) => {
+                let newData = existingData.filter((obj) => mealId != obj['mealId']);
+                AsyncStorage.setItem(localStorageVarName + '_' + type, JSON.stringify(newData))
+                    .then(() => {
+                        resolve(true); // Return true for success
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        resolve(false); // Return false for failure
+                    });
+            })
+            .catch((error) => {
+                console.log(error);
+                resolve(false); // Return false for failure
+            });
+    });
+}
+
 export function editAConsumedMeal(meal) {
     const type = "myConsumedMeals_" + meal.currentDate;
     return new Promise((resolve, reject) => {
@@ -217,4 +239,14 @@ export function editAConsumedMeal(meal) {
     });
 }
 
+export async function getAllKeysOfDB(type) {
+    try {
+        const allKeys = await AsyncStorage.getAllKeys();
+        const filteredKeys = allKeys.filter(key => key.startsWith(localStorageVarName + '_' + type));
+        return filteredKeys;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
 

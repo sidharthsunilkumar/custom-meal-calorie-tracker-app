@@ -10,7 +10,7 @@ import {
 import { Picker } from '@react-native-picker/picker';
 import colors from '../Utils/colors';
 import uuid from 'react-native-uuid';
-import { deleteMeal, editMealsData, saveData } from '../Utils/localStorageFunctions';
+import { deleteAConsumedMealByMealId, deleteMeal, editMealsData, getAllKeysOfDB, saveData } from '../Utils/localStorageFunctions';
 
 export default function EditMeal({ meal, deactivateEdit }) {
     const [name, setName] = useState(meal.name);
@@ -57,10 +57,24 @@ export default function EditMeal({ meal, deactivateEdit }) {
         }
     };
 
+    const deleteAllConsumedOfDeletedMeal = async (mealId) => {
+        try {
+            const keys = getAllKeysOfDB('myConsumedMeals').then((keys)=> {
+                const dates = keys.map( key => key.split('_').pop())
+                dates.forEach((date)=>{
+                    deleteAConsumedMealByMealId(mealId, date);
+                })
+            });
+          } catch (error) {
+            console.error('Error deleting consumed meals of deleted meal:', error);
+          }
+    }
+
     const handleDeleteMeal = () => {
         deleteMeal(meal)
             .then((success) => {
                 if (success) {
+                    deleteAllConsumedOfDeletedMeal(meal.id);
                     deactivateEdit();
                 }
             })
