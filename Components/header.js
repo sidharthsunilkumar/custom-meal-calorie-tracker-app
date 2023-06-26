@@ -5,8 +5,8 @@ export default function Header() {
 
     return (
         <View style={styles.header}>
-            {/* <IconComponent id='calorie' />
-            <View style={styles.space}></View> */}
+            <IconComponent id='icon_white' />
+            <View style={styles.space}></View>
             <Text style={styles.title}>Meal Tracker</Text>
         </View>
     )
@@ -21,10 +21,9 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingBottom: 9,
         paddingLeft: 10,
-        alignItems: 'flex-start', // Align text to the left
-        justifyContent: 'flex-end', // Position text at the bottom
-        // paddingTop: 30,
-        // flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        justifyContent: 'flex-start'
     },
     title: {
         color: '#fff',

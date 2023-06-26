@@ -11,7 +11,8 @@ export default function IconComponent({ id }) {
         fiber: 4,
         sugar: 5,
         nutrition: 6,
-        energy: 7
+        energy: 7,
+        icon_white: 8
     }
 
     const [assets, error] = useAssets([
@@ -22,10 +23,15 @@ export default function IconComponent({ id }) {
         require(`../../assets/nutri-icons-white/fiber_icon.png`),
         require(`../../assets/nutri-icons-white/sugar_icon.png`),
         require(`../../assets/nutri-icons-white/nutrition_icon.png`),
-        require(`../../assets/nutri-icons-white/energy_icon.png`)
+        require(`../../assets/nutri-icons-white/energy_icon.png`),
+        require(`../../assets/logo-1-transparent.png`)
     ]);
 
     return (
-        assets ? <Image source={assets[idIndex[id]]} style={[{ width: 35, height: 35 }, id === 'sugar' ? { width: 40, height: 30 } : null]} /> : null
+        assets ? <Image source={assets[idIndex[id]]} style={[
+            { width: 35, height: 35 },
+            id === 'sugar' ? { width: 40, height: 30 } : null,
+            id === 'icon_white' ? { width: 30, height: 30 } : null
+        ]} /> : null
     )
 }
