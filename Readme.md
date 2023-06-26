@@ -3,9 +3,9 @@
 
 ## Overview
 
-The app allows you to create custom meals and define their nutrition. After which, you can add the meals with the consumed quantity to track your calorie and nutrition. You can set your goals as well as see generate reports to see your avergage nutrition and calorie intake.
+The app allows you to create custom meals and define their nutrition. After which, you can add the meals with the consumed quantity to track your calories and nutrition. You can set your goals and then generate reports to see your average calorie and nutrition intake.
 
-# To create an expo app
+## To create an expo app
 
 1. Install the Expo CLI globally by running the command:
 ```
@@ -17,7 +17,7 @@ npm install -g expo-cli
 expo init <app-name>
 ```
 
-# To start the app using Expo Go
+## To start the app using Expo Go
 
 1. Install the dependencies:
 ```
