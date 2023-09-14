@@ -22,7 +22,8 @@
         "foregroundImage": "./assets/logo-1-small.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.sidharth.sunilkumar.mealtrackerapp"
+      "package": "com.sidharth.sunilkumar.mealtrackerapp",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"

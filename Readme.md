@@ -51,3 +51,19 @@ eas build -p android --profile preview
 
 4. Click the 'install' button. Then choose to open with Chrome. This will download the APK file.
 
+## To deploy app to Play Store
+
+1. Login to eas in cmd using expo email and password
+
+2. Run command:
+```
+eas build
+>andriod
+```
+
+3. After the build, log in to the expo.dev website and download the .aab file of the build from there.
+
+4. Log into Google Play Console and create a new app by following this - https://www.youtube.com/watch?v=pb6OvvSi8Qk
+
+
+
